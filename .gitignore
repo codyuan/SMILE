@@ -1,0 +1,5 @@
+demos
+.vscode
+__pycache__
+.pycharm
+results
