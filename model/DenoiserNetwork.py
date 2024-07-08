@@ -38,7 +38,7 @@ class LinearDenoiser(nn.Module):
     def __init__(self, dim, dim_out, *, activate=None, time_emb_dim=None, norm=True):
         super().__init__()
         self.mlp = nn.Sequential(
-            nn.GELU(),
+            nn.Tanh(),
             nn.Linear(time_emb_dim, dim)
         ) if exists(time_emb_dim) else None
 
@@ -85,7 +85,7 @@ class Denoiser(nn.Module):
             self.time_mlp = nn.Sequential(
                 SinusoidalPosEmb(in_dim),
                 nn.Linear(in_dim - 1 if in_dim % 2 != 0 else in_dim, in_dim * 4),
-                nn.GELU(),
+                nn.Tanh(),
                 nn.Linear(in_dim * 4, in_dim)
             )
         else:
@@ -99,7 +99,7 @@ class Denoiser(nn.Module):
             is_last = ind >= (num_layers - 1)
 
             self.denoiser.append(
-                LinearDenoiser(dim_in, dim_out, activate=nn.GELU if not is_last else None, time_emb_dim=time_dim,
+                LinearDenoiser(dim_in, dim_out, activate=nn.Tanh if not is_last else None, time_emb_dim=time_dim,
                                norm=ind != 0),
             )
 

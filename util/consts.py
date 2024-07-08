@@ -1,0 +1,20 @@
+MUJOCO_ENVS=["HalfCheetah-v2", "Ant-v2", "Hopper-v2", "Walker2d-v2", "Humanoid-v2", "Reacher-v2"]
+D4RL_ENVS=[
+    "hopper-medium-expert-v2",
+    "hopper-expert-v2",
+    "walker2d-medium-expert-v2",
+    "halfcheetah-medium-expert-v2",
+    "ant-medium-expert-v2",
+    "hopper-medium-replay-v2",
+    "walker2d-medium-replay-v2",
+    "halfcheetah-medium-replay-v2",
+    "ant-medium-replay-v2",
+    "hopper-medium-v2",
+    "walker2d-medium-v2",
+    "halfcheetah-medium-v2",
+    "ant-medium-v2",
+    "hopper-random-v2",
+    "walker2d-random-v2",
+    "halfcheetah-random-v2",
+    "ant-random-v2",
+]

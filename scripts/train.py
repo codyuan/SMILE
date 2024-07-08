@@ -1,9 +1,14 @@
 import torch
 import numpy as np
 import random
+import sys
+
+sys.path.append('/workspace/SMILE')
 from model import Denoiser,Policy,SMILE,SMILETrainer
 from util.arguments import get_args
 import gym
+# import gymnasium as gym
+import d4rl
 
 def main():
 
@@ -37,7 +42,7 @@ def main():
         denoiser,
         policy,
         args,
-        betas=torch.arange(start=0.05, end=0.6, step=((0.6 - 0.05) / args.diffusion_steps)),
+        betas=torch.arange(start=args.betas_low, end=args.betas_high, step=((args.betas_high - args.betas_low) / args.diffusion_steps)),
     ).to(device)
 
     trainer = SMILETrainer(
@@ -52,9 +57,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-

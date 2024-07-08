@@ -6,12 +6,36 @@ def get_args():
     parser.add_argument(
         '--env_name',
         default="HalfCheetah-v2",
-        choices=["HalfCheetah-v2", "Ant-v2", "Hopper-v2", "Walker2d-v2", "Humanoid-v2", "Reacher-v2"],
+        choices=[
+            "HalfCheetah-v2", 
+            "Ant-v2", 
+            "Hopper-v2", 
+            "Walker2d-v2", 
+            "Humanoid-v2", 
+            "Reacher-v2",
+            "hopper-medium-expert-v2",
+            "hopper-expert-v2",
+            "walker2d-medium-expert-v2",
+            "halfcheetah-medium-expert-v2",
+            "ant-medium-expert-v2",
+            "hopper-medium-replay-v2",
+            "walker2d-medium-replay-v2",
+            "halfcheetah-medium-replay-v2",
+            "ant-medium-replay-v2",
+            "hopper-medium-v2",
+            "walker2d-medium-v2",
+            "halfcheetah-medium-v2",
+            "ant-medium-v2",
+            "hopper-random-v2",
+            "walker2d-random-v2",
+            "halfcheetah-random-v2",
+            "ant-random-v2",
+        ],
         help='environment to train on.')
 
     parser.add_argument(
         '--demo_folder',
-        default="../demos",
+        default="demos",
         help='folder containing demonstrations.')
 
     parser.add_argument(
@@ -21,7 +45,7 @@ def get_args():
 
     parser.add_argument(
         '--policy_loss_type',
-        default='l1', choices=['l1', 'l2', 'cosine', 'mle'],
+        default='l1', choices=['l1', 'l2', 'cosine', 'mle', 'dtr'],
         help='objective function to train policy network.')
 
     parser.add_argument(
@@ -44,7 +68,7 @@ def get_args():
 
     parser.add_argument(
         '--batch_size',
-        default=128,
+        default=256,
         type=int,
         help='batch size for every iteration.')
 
@@ -62,6 +86,12 @@ def get_args():
 
     parser.add_argument(
         '--num_samples',
+        default=2e7,
+        type=int,
+        help='total samples for training.')
+    
+    parser.add_argument(
+        '--pretrain_num_samples',
         default=2e7,
         type=int,
         help='total samples for training.')
@@ -125,6 +155,24 @@ def get_args():
         default=10,
         type=int,
         help='update ema every x iterations.')
+    
+    parser.add_argument(
+        '--betas_low',
+        default=0.05,
+        type=float,
+        help='the lowest value of std schedule.')
+    
+    parser.add_argument(
+        '--betas_high',
+        default=0.6,
+        type=float,
+        help='the highest value of std schedule.')
+    
+    parser.add_argument(
+        '--threshold',
+        default=1,
+        type=int,
+        help='the demonstrations who are lower than threshold will be filtered.')
 
     args = parser.parse_args()
 

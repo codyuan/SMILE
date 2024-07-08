@@ -24,6 +24,7 @@ class SMILE(nn.Module):
             betas = cosine_beta_schedule(self.diffusion_steps)
 
         sigmas = np.sqrt(np.cumsum(betas**2))
+        # sigmas=betas
 
         timesteps, = betas.shape
         self.num_timesteps = int(timesteps)
@@ -79,17 +80,28 @@ class SMILE(nn.Module):
             raise NotImplementedError()
 
         return loss
+    
+    def diffusion_trust_region_losses(self, s, t):
+        
+        a=self.policy(s)
+        a_t,*_ = self.diffuse(a=a, t=t)
+        
+        with torch.no_grad():
+            pred_noise = self.denoiser(s, a_t, t)
+        a_t_prime,mean_prime,std_prime,_=self.diffuse(a=a, t= t, noise=pred_noise)
+        
+        loss = torch.sum((a_t_prime-a_t) ** 2, dim=1).mean()
+
+        return loss
 
 
     def denoiser_losses(self, s, a, t, noise = None):
-
         noise = default(noise, lambda: torch.randn_like(a))
         a_noisy,*_ = self.diffuse(a=a, t=t, noise=noise)
         pred_noise = self.denoiser(s,a_noisy,t)
 
-
         if self.denoiser_loss_type == 'l1':
-            loss = (noise - pred_noise).abs().mean()
+            loss = (noise - pred_noise).abs().mean()            
         elif self.denoiser_loss_type == 'l2':
             loss = torch.sum((noise-pred_noise) ** 2, dim=1).mean()
         elif self.denoiser_loss_type == 'cosine':
@@ -110,8 +122,11 @@ class SMILE(nn.Module):
 
     def policy_loss(self, s ,a ):   
         b, device, = s.shape[0], s.device
-        t = torch.randint(0, self.num_timesteps, (b,), device=device).long()   
-
+        t = torch.randint(0, self.num_timesteps, (b,), device=device).long()  
+        
+        if self.policy_loss_type == 'dtr':
+            return self.diffusion_trust_region_losses(s,t) 
+        
         return self.policy_losses(s, a ,t )
 
 

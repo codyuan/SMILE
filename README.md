@@ -1,6 +1,6 @@
 # Good Better Best: Self-Motivated Imitation Learning for noisy Demonstrations
 
-All relevant citations for methods used are found in the paper's list of references（https://arxiv.org/abs/2310.15815）
+All relevant citations for methods used are found in the paper's list of references（https://arxiv.org/abs/2310.15815 ）
 
 ## Requirements
 
